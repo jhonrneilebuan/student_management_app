@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
 import '../models/student.dart';
 import 'student_detail_screen.dart';
+import '../services/api_service.dart'; // Ensure ApiService is imported
 
-class StudentViewForm extends StatelessWidget {
+class StudentViewForm extends StatefulWidget {
   final Student student;
 
   const StudentViewForm({required this.student});
+
+  @override
+  _StudentViewFormState createState() => _StudentViewFormState();
+}
+
+class _StudentViewFormState extends State<StudentViewForm> {
+  final ApiService apiService = ApiService(); // Initialize ApiService
+  late Student student;
+
+  @override
+  void initState() {
+    super.initState();
+    student = widget.student;
+  }
+
+  Future<void> _refreshStudent() async {
+    try {
+      final updatedStudent = await apiService.getStudentById(student.id);
+      setState(() {
+        student = updatedStudent;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +39,10 @@ class StudentViewForm extends StatelessWidget {
       appBar: AppBar(
         title: const Text('View Student Details'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        onRefresh: _refreshStudent, // Refresh function
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
           children: [
             Text(
               'First Name: ${student.firstName}',
