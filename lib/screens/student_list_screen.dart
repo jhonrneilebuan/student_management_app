@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:student_management_app/screens/student_viewform.dart';
 import '../services/api_service.dart';
 import '../models/student.dart';
-import 'student_detail_screen.dart';
 import 'student_form.dart'; // Import the StudentFormScreen
 
 class StudentListScreen extends StatefulWidget {
@@ -61,7 +61,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => StudentDetailScreen(studentId: students[index].id),
+                            builder: (context) => StudentViewForm(student: students[index]),
                           ),
                         );
                       },

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:student_management_app/screens/student_list_screen.dart';
 import '../services/api_service.dart';
 import '../models/student.dart';
 
 class StudentDetailScreen extends StatefulWidget {
   final String studentId;
 
-  StudentDetailScreen({required this.studentId});
+  StudentDetailScreen({required this.studentId, Key? key}) : super(key: key);
 
   @override
   _StudentDetailScreenState createState() => _StudentDetailScreenState();
@@ -48,8 +49,9 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
       year = 'First Year'; // Provide a default value from the options
     }
 
-    return Scaffold(resizeToAvoidBottomInset: true,
-      appBar: AppBar( title: const Text('Student Details')),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(title: const Text('Student Details')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -100,15 +102,13 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // Ensure year is not null
                       if (year != null) {
                         student = student.copyWith(year: year!);
                         await apiService.updateStudent(student);
                         Navigator.pop(context);
                       } else {
-                        // Handle case where year is null
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please select a year')),
+                          const SnackBar(content: Text('Please select a year')),
                         );
                       }
                     }
@@ -119,12 +119,16 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     await apiService.deleteStudent(student.id);
-                    Navigator.pop(context);
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => StudentListScreen()),
+                      (route) => false, // This removes all previous routes
+                    );
                   },
-                  child: const Text('Delete'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
+                  child: const Text('Delete'),
                 ),
               ],
             ),

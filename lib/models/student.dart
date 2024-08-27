@@ -7,7 +7,7 @@ class Student {
   final bool enrolled;
 
   Student({
-    required this.id,
+    this.id = '',
     required this.firstName,
     required this.lastName,
     required this.course,
