@@ -41,48 +41,59 @@ class _StudentViewFormState extends State<StudentViewForm> {
       ),
       body: RefreshIndicator(
         onRefresh: _refreshStudent, // Refresh function
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            Text(
-              'First Name: ${student.firstName}',
-              style: const TextStyle(fontSize: 18),
+        child: Container( height: 250,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: const Color.fromARGB(255, 0, 0, 0),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Last Name: ${student.lastName}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Course: ${student.course}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Year: ${student.year}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => StudentDetailScreen(studentId: student.id),
-                    ),
-                  );
-                },
-                child: const Text('Update'),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          margin: const EdgeInsets.all(16.0),
+          child: ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: [
+              Text(
+                'First Name: ${student.firstName}',
+                style: const TextStyle(fontSize: 18),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                'Last Name: ${student.lastName}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Course: ${student.course}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Year: ${student.year}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            StudentDetailScreen(studentId: student.id),
+                      ),
+                    );
+                  },
+                  child: const Text('Update'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
