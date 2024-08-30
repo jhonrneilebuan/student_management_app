@@ -87,72 +87,78 @@ class _StudentViewFormState extends State<StudentViewForm> {
         onRefresh: _refreshStudent,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Container displaying student details
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 3,
-                    color: Colors.grey.shade300,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0), // Add padding around the scrollable content
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container displaying student details
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 3,
+                      color: Colors.grey.shade300,
+                    ),
                   ),
-                ),
-                padding: const EdgeInsets.all(20.0), // Added padding inside the container
-                margin: const EdgeInsets.symmetric(horizontal: 16.0), // Padding on left and right
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'First Name: ${student.firstName}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Last Name: ${student.lastName}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Course: ${student.course}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Year: ${student.year}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
-                      style: const TextStyle(fontSize: 18, color: Colors.green),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              // Update button to navigate to the student detail screen
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StudentDetailScreen(studentId: student.id),
+                  padding: const EdgeInsets.all(20.0), // Added padding inside the container
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'First Name: ${student.firstName}',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Last Name: ${student.lastName}',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Course: ${student.course}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Year: ${student.year}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: student.enrolled ? Colors.green : Colors.red, // Conditional color
+                        ),
+                      ),
+                    ],
                   ),
-                  child: const Text('Update Details'),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                // Update button to navigate to the student detail screen
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StudentDetailScreen(studentId: student.id),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    ),
+                    child: const Text('Update Details'),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
