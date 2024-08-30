@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_management_app/screens/student_list_screen.dart';
 import '../services/api_service.dart';
 import '../models/student.dart';
 
@@ -13,7 +12,7 @@ class StudentDetailScreen extends StatefulWidget {
 }
 
 class _StudentDetailScreenState extends State<StudentDetailScreen> {
-  late Student student;
+  Student? student; // Make student nullable
   bool isLoading = true;
   final ApiService apiService = ApiService();
   String? year;
@@ -24,87 +23,128 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
     _loadStudent();
   }
 
+  // Function to load student data from the API
   Future<void> _loadStudent() async {
     try {
-      student = await apiService.getStudentById(widget.studentId);
+      final fetchedStudent = await apiService.getStudentById(widget.studentId);
       setState(() {
-        year = student.year;  
+        student = fetchedStudent; // Set the student object
+        year = student?.year ?? 'First Year'; // Use default year if null
         isLoading = false;
       });
     } catch (e) {
       print(e);
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Show a loading spinner while fetching data
     if (isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Handle case where student could not be loaded
+    if (student == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Student Details')),
+        body: const Center(child: Text('Failed to load student details.')),
+      );
     }
 
     final _formKey = GlobalKey<FormState>();
 
-    // Ensure `year` has a default value from the options
-    if (year == null || !['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Fifth Year'].contains(year)) {
-      year = 'First Year'; // Provide a default value from the options
-    }
-
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('Student Details')),
+      resizeToAvoidBottomInset: true, // Ensure content is not hidden by the keyboard
+      appBar: AppBar(
+        title: const Text('Student Details'),
+      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  initialValue: student.firstName,
-                  decoration: const InputDecoration(labelText: 'First Name'),
-                  onSaved: (value) => student = student.copyWith(firstName: value!),
+        padding: const EdgeInsets.all(16.0), // Padding around the form
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // First Name TextFormField
+              TextFormField(
+                initialValue: student!.firstName,
+                decoration: const InputDecoration(
+                  labelText: 'First Name',
+                  border: OutlineInputBorder(), // Add border to the field
                 ),
-                TextFormField(
-                  initialValue: student.lastName,
-                  decoration: const InputDecoration(labelText: 'Last Name'),
-                  onSaved: (value) => student = student.copyWith(lastName: value!),
+                onSaved: (value) => student = student!.copyWith(firstName: value ?? ''),
+              ),
+              const SizedBox(height: 16.0), // Spacing between fields
+
+              // Last Name TextFormField
+              TextFormField(
+                initialValue: student!.lastName,
+                decoration: const InputDecoration(
+                  labelText: 'Last Name',
+                  border: OutlineInputBorder(),
                 ),
-                TextFormField(
-                  initialValue: student.course,
-                  decoration: const InputDecoration(labelText: 'Course'),
-                  onSaved: (value) => student = student.copyWith(course: value!),
+                onSaved: (value) => student = student!.copyWith(lastName: value ?? ''),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Course TextFormField
+              TextFormField(
+                initialValue: student!.course,
+                decoration: const InputDecoration(
+                  labelText: 'Course',
+                  border: OutlineInputBorder(),
                 ),
-                DropdownButtonFormField<String>(
-                  value: year,
-                  items: [
-                    'First Year',
-                    'Second Year',
-                    'Third Year',
-                    'Fourth Year',
-                    'Fifth Year'
-                  ]
-                  .map((year) => DropdownMenuItem(
-                        value: year,
-                        child: Text(year),
-                      ))
-                  .toList(),
-                  decoration: const InputDecoration(labelText: 'Year'),
-                  onChanged: (value) => setState(() => year = value),
-                  onSaved: (value) => student = student.copyWith(year: value!),
+                onSaved: (value) => student = student!.copyWith(course: value ?? ''),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Year DropdownButtonFormField
+              DropdownButtonFormField<String>(
+                value: year,
+                items: [
+                  'First Year',
+                  'Second Year',
+                  'Third Year',
+                  'Fourth Year',
+                  'Fifth Year'
+                ]
+                .map((year) => DropdownMenuItem(
+                      value: year,
+                      child: Text(year),
+                    ))
+                .toList(),
+                decoration: const InputDecoration(
+                  labelText: 'Year',
+                  border: OutlineInputBorder(),
                 ),
-                SwitchListTile(
-                  title: const Text('Enrolled'),
-                  value: student.enrolled,
-                  onChanged: (value) => setState(() => student = student.copyWith(enrolled: value)),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+                onChanged: (value) => setState(() => year = value),
+                onSaved: (value) => student = student!.copyWith(year: value ?? 'First Year'),
+              ),
+              const SizedBox(height: 16.0),
+
+              // Enrolled SwitchListTile
+              SwitchListTile(
+                title: const Text('Enrolled'),
+                value: student!.enrolled,
+                onChanged: (value) => setState(() => student = student!.copyWith(enrolled: value)),
+              ),
+              const SizedBox(height: 20.0),
+
+              // Update Button
+              Center(
+                child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       if (year != null) {
-                        student = student.copyWith(year: year!);
-                        await apiService.updateStudent(student);
+                        student = student!.copyWith(year: year!);
+                        await apiService.updateStudent(student!);
                         Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,25 +153,14 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                       }
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    textStyle: const TextStyle(fontSize: 16),
+                  ),
                   child: const Text('Update'),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await apiService.deleteStudent(student.id);
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => StudentListScreen()),
-                      (route) => false, // This removes all previous routes
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  child: const Text('Delete'),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

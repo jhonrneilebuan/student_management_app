@@ -25,19 +25,40 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
         firstName: firstName,
         lastName: lastName,
         course: course,
-        year: year ?? 'First Year', 
+        year: year ?? 'First Year',
         enrolled: enrolled,
       );
 
-      await apiService.createStudent(newStudent);
-      Navigator.pushReplacementNamed(context, '/studentList'); 
+      try {
+        await apiService.createStudent(newStudent);
+        if (mounted) { // Check if widget is still mounted
+          Navigator.pushReplacementNamed(context, '/studentList');
+        }
+      } catch (e) {
+        // Handle error if needed
+        print('Failed to create student: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to create student')),
+          );
+        }
+      }
     }
   }
 
   @override
+  void dispose() {
+    // Clean up any resources if necessary
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text('Fill Student Information')),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: const Text('Fill Student Information'),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -45,57 +66,97 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'First Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the first name';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => firstName = value!,
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey.shade300,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'First Name',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the first name';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => firstName = value!,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Last Name',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the last name';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => lastName = value!,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Course',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the course';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => course = value!,
+                      ),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          labelText: 'Year',
+                          border: OutlineInputBorder(),
+                        ),
+                        value: year,
+                        items: ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Fifth Year']
+                            .map((year) => DropdownMenuItem(
+                                  value: year,
+                                  child: Text(year),
+                                ))
+                            .toList(),
+                        onChanged: (value) => setState(() => year = value),
+                        validator: (value) => value == null ? 'Please select a year' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      SwitchListTile(
+                        title: const Text('Enrolled'),
+                        value: enrolled,
+                        onChanged: (value) => setState(() => enrolled = value),
+                      ),
+                    ],
+                  ),
                 ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Last Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the last name';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => lastName = value!,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Course'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the course';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => course = value!,
-                ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Year'),
-                  value: year,
-                  items: ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Fifth Year']
-                      .map((year) => DropdownMenuItem(
-                            value: year,
-                            child: Text(year),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => year = value),
-                  validator: (value) => value == null ? 'Please select a year' : null,
-                ),
-                SwitchListTile(
-                  title: Text('Enrolled'),
-                  value: enrolled,
-                  onChanged: (value) => setState(() => enrolled = value),
-                ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Submit'),
                 ),
               ],
             ),
