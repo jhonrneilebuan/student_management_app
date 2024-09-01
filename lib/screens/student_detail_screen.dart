@@ -145,7 +145,7 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                       if (year != null) {
                         student = student!.copyWith(year: year!);
                         await apiService.updateStudent(student!);
-                        Navigator.pop(context);
+                        Navigator.pop(context, true); // NILAGYAN KO NG TRUE
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Please select a year')),

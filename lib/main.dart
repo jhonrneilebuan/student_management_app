@@ -24,23 +24,22 @@ import 'package:flutter/material.dart';
 import 'screens/student_list_screen.dart';
 import 'screens/student_form.dart';
 
+// Entry point ng Flutter application
 void main() {
-  runApp(MyApp());
+  runApp(MyApp()); // Tumatawag sa runApp function at ipinapasa ang MyApp widget bilang root ng app.
 }
 
+// MyApp class na nag-`extends` sa StatelessWidget, ibig sabihin hindi ito nagbabago ng state.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Student Management',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: '/studentList',
+      title: 'Student Management', // Tinutukoy ang pamagat ng app na makikita sa task manager.
+      debugShowCheckedModeBanner: false, // Inaalis ang debug banner na nasa top-right ng screen.
+      initialRoute: '/studentList', // Ito ang unang screen na lalabas sa pagsisimula ng app.
       routes: {
-        '/studentList': (context) => StudentListScreen(),
-        '/studentForm': (context) => StudentFormScreen(),
+        '/studentList': (context) => StudentListScreen(), // Nagbibigay ng ruta para sa StudentListScreen.
+        '/studentForm': (context) => StudentFormScreen(), // Nagbibigay ng ruta para sa StudentFormScreen.
       },
     );
   }

@@ -51,6 +51,11 @@ class _StudentViewFormState extends State<StudentViewForm> {
     return Scaffold(
       // AppBar with a title and a delete icon
       appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, true);
+            }),
         title: const Text('View Student Details'),
         actions: [
           IconButton(
@@ -61,7 +66,8 @@ class _StudentViewFormState extends State<StudentViewForm> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('Confirm Delete'),
-                    content: const Text('Are you sure you want to delete this student?'),
+                    content: const Text(
+                        'Are you sure you want to delete this student?'),
                     actions: [
                       TextButton(
                         child: const Text('Cancel'),
@@ -88,7 +94,8 @@ class _StudentViewFormState extends State<StudentViewForm> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.all(16.0), // Add padding around the scrollable content
+            padding: const EdgeInsets.all(
+                16.0), // Add padding around the scrollable content
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -102,18 +109,21 @@ class _StudentViewFormState extends State<StudentViewForm> {
                       color: Colors.grey.shade300,
                     ),
                   ),
-                  padding: const EdgeInsets.all(20.0), // Added padding inside the container
+                  padding: const EdgeInsets.all(
+                      20.0), // Added padding inside the container
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'First Name: ${student.firstName}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Last Name: ${student.lastName}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -130,7 +140,9 @@ class _StudentViewFormState extends State<StudentViewForm> {
                         'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
                         style: TextStyle(
                           fontSize: 18,
-                          color: student.enrolled ? Colors.green : Colors.red, // Conditional color
+                          color: student.enrolled
+                              ? Colors.green
+                              : Colors.red, // Conditional color
                         ),
                       ),
                     ],
@@ -140,18 +152,24 @@ class _StudentViewFormState extends State<StudentViewForm> {
                 // Update button to navigate to the student detail screen
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentDetailScreen(studentId: student.id),
+                          builder: (context) =>
+                              StudentDetailScreen(studentId: student.id),
                         ),
                       );
+
+                      if (result == true) {
+                        _refreshStudent(); // Refresh the student details after update
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 15),
                     ),
                     child: const Text('Update Details'),
                   ),
