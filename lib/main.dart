@@ -23,13 +23,10 @@
 import 'package:flutter/material.dart';
 import 'screens/student_list_screen.dart';
 import 'screens/student_form.dart';
-
-// Entry point ng Flutter application
 void main() {
-  runApp(MyApp()); // Tumatawag sa runApp function at ipinapasa ang MyApp widget bilang root ng app.
+  runApp(MyApp()); 
 }
 
-// MyApp class na nag-`extends` sa StatelessWidget, ibig sabihin hindi ito nagbabago ng state.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
