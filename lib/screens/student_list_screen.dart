@@ -5,11 +5,13 @@ import '../models/student.dart';
 import 'student_form.dart'; // Import the StudentFormScreen
 
 class StudentListScreen extends StatefulWidget {
+  const StudentListScreen({super.key});
+
   @override
-  _StudentListScreenState createState() => _StudentListScreenState();
+  StudentListScreenState createState() => StudentListScreenState();
 }
 
-class _StudentListScreenState extends State<StudentListScreen> {
+class StudentListScreenState extends State<StudentListScreen> {
   ApiService apiService = ApiService(); // Instance of ApiService to handle API calls
   late Future<List<Student>> _futureStudents; // Future that will hold the list of students
 
@@ -34,11 +36,11 @@ class _StudentListScreenState extends State<StudentListScreen> {
         title: const Text('Student List'), 
         actions: [
           IconButton(
-            icon: Icon(Icons.add), // Icon to add a new student
+            icon: const Icon(Icons.add), // Icon to add a new student
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StudentFormScreen()), // Navigate to the StudentFormScreen when the add button is pressed
+                MaterialPageRoute(builder: (context) => const StudentFormScreen()), // Navigate to the StudentFormScreen when the add button is pressed
               );
             },
           ),
@@ -66,7 +68,6 @@ class _StudentListScreenState extends State<StudentListScreen> {
                             builder: (context) => StudentViewForm(student: students[index]),
                           ),
                         );
-
                         if (result == true) {
                           _refreshStudents(); // If the user deleted a student, refresh the list
                         }
@@ -79,7 +80,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}')); // Display error if the API call fails
           }
-          return Center(child: CircularProgressIndicator()); // Show a loading spinner while fetching data
+          return const Center(child: CircularProgressIndicator()); // Show a loading spinner while fetching data
         },
       ),
     );

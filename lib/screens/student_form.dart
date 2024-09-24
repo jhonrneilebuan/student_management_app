@@ -3,11 +3,13 @@ import '../services/api_service.dart';
 import '../models/student.dart';
 
 class StudentFormScreen extends StatefulWidget {
+  const StudentFormScreen({super.key});
+
   @override
-  _StudentFormScreenState createState() => _StudentFormScreenState();
+  StudentFormScreenState createState() => StudentFormScreenState();
 }
 
-class _StudentFormScreenState extends State<StudentFormScreen> {
+class StudentFormScreenState extends State<StudentFormScreen> {
   final _formKey = GlobalKey<FormState>(); // Key para sa Form widget
   final ApiService apiService = ApiService(); // Service para sa API calls
   String firstName = ''; // Variable para sa first name
@@ -37,10 +39,10 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
         }
       } catch (e) {
         // I-handle ang error kung may mangyaring problema
-        print('Failed to create student: $e'); // I-print ang error sa console
+        // I-print ang error sa console
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to create student')), // Ipakita ang error sa user
+            const SnackBar(content: Text('Failed to create student')), // Ipakita ang error sa user
           );
         }
       }

@@ -37,7 +37,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode != 201) { // Assuming your backend returns a 201 status code for successful creation
+    if (response.statusCode != 201) {
       throw Exception('Failed to create student');
     }
   }
