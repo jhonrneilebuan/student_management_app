@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, 
       initialRoute: '/studentList',
       routes: {
-        '/studentList': (context) => const StudentListScreen(), // Nagbibigay ng ruta para sa StudentListScreen.
-        '/studentForm': (context) => const StudentFormScreen(), // Nagbibigay ng ruta para sa StudentFormScreen.
+        '/studentList': (context) => const StudentListScreen(), 
+        '/studentForm': (context) => const StudentFormScreen(), 
       },
     );
   }

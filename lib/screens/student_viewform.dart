@@ -6,42 +6,41 @@ import '../services/api_service.dart';
 class StudentViewForm extends StatefulWidget {
   final Student student;
 
-  const StudentViewForm({required this.student});
+  const StudentViewForm({super.key, required this.student});
 
   @override
-  _StudentViewFormState createState() => _StudentViewFormState();
+  StudentViewFormState createState() => StudentViewFormState();
 }
 
-class _StudentViewFormState extends State<StudentViewForm> {
+class StudentViewFormState extends State<StudentViewForm> {
   final ApiService apiService = ApiService();
   late Student student;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the student object from the widget
     student = widget.student;
   }
 
-  // Function to refresh student details from the API
   Future<void> _refreshStudent() async {
     try {
       final updatedStudent = await apiService.getStudentById(student.id);
       setState(() {
-        // Update the student object with refreshed data
         student = updatedStudent;
       });
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
 
-  // Function to delete the student
   Future<void> _deleteStudent() async {
     try {
       await apiService.deleteStudent(student.id);
-      Navigator.pop(context, true); // Navigate back after deletion
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context, true);
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
@@ -49,7 +48,6 @@ class _StudentViewFormState extends State<StudentViewForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar with a title and a delete icon
       appBar: AppBar(
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -88,18 +86,16 @@ class _StudentViewFormState extends State<StudentViewForm> {
           ),
         ],
       ),
-      // RefreshIndicator allows pull-to-refresh functionality
       body: RefreshIndicator(
         onRefresh: _refreshStudent,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.all(
-                16.0), // Add padding around the scrollable content
+                16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Container displaying student details
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -110,7 +106,7 @@ class _StudentViewFormState extends State<StudentViewForm> {
                     ),
                   ),
                   padding: const EdgeInsets.all(
-                      20.0), // Added padding inside the container
+                      20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -142,14 +138,13 @@ class _StudentViewFormState extends State<StudentViewForm> {
                           fontSize: 18,
                           color: student.enrolled
                               ? Colors.green
-                              : Colors.red, // Conditional color
+                              : Colors.red,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Update button to navigate to the student detail screen
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -160,9 +155,8 @@ class _StudentViewFormState extends State<StudentViewForm> {
                               StudentDetailScreen(studentId: student.id),
                         ),
                       );
-
                       if (result == true) {
-                        _refreshStudent(); // Refresh the student details after update
+                        _refreshStudent();
                       }
                     },
                     style: ElevatedButton.styleFrom(

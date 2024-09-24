@@ -30,7 +30,7 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
       setState(() {
         student = fetchedStudent; 
         year = student?.year ?? 'First Year'; 
-        enrolled = student?.enrolled ?? false; // Set the enrolled status
+        enrolled = student?.enrolled ?? false;
         isLoading = false;
       });
     } catch (e) {

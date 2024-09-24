@@ -10,39 +10,36 @@ class StudentFormScreen extends StatefulWidget {
 }
 
 class StudentFormScreenState extends State<StudentFormScreen> {
-  final _formKey = GlobalKey<FormState>(); // Key para sa Form widget
-  final ApiService apiService = ApiService(); // Service para sa API calls
-  String firstName = ''; // Variable para sa first name
-  String lastName = ''; // Variable para sa last name
-  String course = ''; // Variable para sa course
-  String? year; // Variable para sa year (pwedeng null)
-  bool enrolled = false; // Variable para sa enrollment status
+  final _formKey = GlobalKey<FormState>();
+  final ApiService apiService = ApiService();
+  String firstName = '';
+  String lastName = '';
+  String course = '';
+  String? year;
+  bool enrolled = false;
 
-  // Function para i-submit ang form
   Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) { // Suriin kung valid ang form
-      _formKey.currentState!.save(); // I-save ang mga value ng form
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
       Student newStudent = Student(
-        id: '', // Ang ID ay auto-generated ng backend
+        id: '',
         firstName: firstName,
         lastName: lastName,
         course: course,
-        year: year ?? 'First Year', // Default year kung null
+        year: year ?? 'First Year',
         enrolled: enrolled,
       );
 
       try {
-        await apiService.createStudent(newStudent); // I-create ang student gamit ang API
-        if (mounted) { // Siguraduhin na ang widget ay nakikita pa
-          Navigator.pushReplacementNamed(context, '/studentList'); // I-navigate pabalik sa list screen
+        await apiService.createStudent(newStudent); 
+        if (mounted) { 
+          Navigator.pushReplacementNamed(context, '/studentList');
         }
       } catch (e) {
-        // I-handle ang error kung may mangyaring problema
-        // I-print ang error sa console
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to create student')), // Ipakita ang error sa user
+            const SnackBar(content: Text('Failed to create student')),
           );
         }
       }
@@ -51,26 +48,25 @@ class StudentFormScreenState extends State<StudentFormScreen> {
 
   @override
   void dispose() {
-    // Linisin ang mga resources kung kinakailangan
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Siguraduhin na hindi matakpan ng keyboard ang content
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Fill Student Information'), // Title ng AppBar
+        title: const Text('Fill Student Information'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Padding sa paligid ng form
+          padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: _formKey, // I-bind ang form key sa Form widget
+            key: _formKey,
             child: Column(
               children: [
                 Container(
-                  width: double.infinity, // Full width container
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
@@ -79,22 +75,22 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.all(16.0), // Padding sa loob ng container
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'First Name', // Label para sa first name field
+                          labelText: 'First Name',
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter the first name'; // Error message kung walang input
+                            return 'Please enter the first name';
                           }
                           return null;
                         },
-                        onSaved: (value) => firstName = value!, // I-save ang first name
+                        onSaved: (value) => firstName = value!,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -108,7 +104,7 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                           }
                           return null;
                         },
-                        onSaved: (value) => lastName = value!, // I-save ang last name
+                        onSaved: (value) => lastName = value!,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -122,7 +118,7 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                           }
                           return null;
                         },
-                        onSaved: (value) => course = value!, // I-save ang course
+                        onSaved: (value) => course = value!,
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
@@ -137,23 +133,23 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                                   child: Text(year),
                                 ))
                             .toList(),
-                        onChanged: (value) => setState(() => year = value), // I-update ang year
+                        onChanged: (value) => setState(() => year = value),
                         validator: (value) => value == null ? 'Please select a year' : null,
                       ),
                       const SizedBox(height: 16),
                       SwitchListTile(
                         title: const Text('Enrolled'),
                         value: enrolled,
-                        onChanged: (value) => setState(() => enrolled = value), // I-update ang enrollment status
+                        onChanged: (value) => setState(() => enrolled = value),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _submitForm, // I-submit ang form kapag pinindot
+                  onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.blue, // Kulay ng text
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue, 
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

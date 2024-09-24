@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_management_app/screens/student_viewform.dart';
 import '../services/api_service.dart';
 import '../models/student.dart';
-import 'student_form.dart'; // Import the StudentFormScreen
+import 'student_form.dart';
 
 class StudentListScreen extends StatefulWidget {
   const StudentListScreen({super.key});
@@ -12,19 +12,17 @@ class StudentListScreen extends StatefulWidget {
 }
 
 class StudentListScreenState extends State<StudentListScreen> {
-  ApiService apiService = ApiService(); // Instance of ApiService to handle API calls
-  late Future<List<Student>> _futureStudents; // Future that will hold the list of students
+  ApiService apiService = ApiService();
+  late Future<List<Student>> _futureStudents;
 
   @override
   void initState() {
     super.initState();
-    _futureStudents = apiService.getStudents(); // Initialize the future with the list of students from the API
+    _futureStudents = apiService.getStudents();
   }
-
-  // Function to refresh the list of students
   Future<void> _refreshStudents() async {
     setState(() {
-      _futureStudents = apiService.getStudents(); // Re-fetch the list of students and update the UI
+      _futureStudents = apiService.getStudents();
     });
   }
 
@@ -32,36 +30,35 @@ class StudentListScreenState extends State<StudentListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Disable the default back button
+        automaticallyImplyLeading: false,
         title: const Text('Student List'), 
         actions: [
           IconButton(
-            icon: const Icon(Icons.add), // Icon to add a new student
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const StudentFormScreen()), // Navigate to the StudentFormScreen when the add button is pressed
+                MaterialPageRoute(builder: (context) => const StudentFormScreen()),
               );
             },
           ),
         ],
       ),
       body: FutureBuilder<List<Student>>(
-        future: _futureStudents, // The future that contains the list of students
+        future: _futureStudents,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Student> students = snapshot.data!; // Retrieve the list of students from the snapshot
+            List<Student> students = snapshot.data!;
             return RefreshIndicator(
-              onRefresh: _refreshStudents, // Allow pull-to-refresh to update the list
+              onRefresh: _refreshStudents,
               child: ListView.builder(
-                itemCount: students.length, // Number of students to display
+                itemCount: students.length,
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text('${students[index].firstName} ${students[index].lastName}'), // Display the student's name
-                      subtitle: Text('${students[index].course} - ${students[index].year}'), // Display the student's course and year
+                      title: Text('${students[index].firstName} ${students[index].lastName}'),
+                      subtitle: Text('${students[index].course} - ${students[index].year}'),
                       onTap: () async {
-                        // When a student is tapped, navigate to the StudentViewForm to view details
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -69,7 +66,7 @@ class StudentListScreenState extends State<StudentListScreen> {
                           ),
                         );
                         if (result == true) {
-                          _refreshStudents(); // If the user deleted a student, refresh the list
+                          _refreshStudents();
                         }
                       },
                     ),
@@ -78,9 +75,9 @@ class StudentListScreenState extends State<StudentListScreen> {
               ),
             );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}')); // Display error if the API call fails
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
-          return const Center(child: CircularProgressIndicator()); // Show a loading spinner while fetching data
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
