@@ -12,7 +12,7 @@ class StudentDetailScreen extends StatefulWidget {
 }
 
 class StudentDetailScreenState extends State<StudentDetailScreen> {
-  Student? student; 
+  Student? student;
   bool isLoading = true;
   final ApiService apiService = ApiService();
   String? year;
@@ -28,8 +28,8 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
     try {
       final fetchedStudent = await apiService.getStudentById(widget.studentId);
       setState(() {
-        student = fetchedStudent; 
-        year = student?.year ?? 'First Year'; 
+        student = fetchedStudent;
+        year = student?.year ?? 'First Year';
         enrolled = student?.enrolled ?? false;
         isLoading = false;
       });
@@ -44,25 +44,38 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Scaffold(
+        backgroundColor: Colors.white,
         body: Center(child: CircularProgressIndicator()),
       );
     }
     if (student == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Student Details')),
-        body: const Center(child: Text('Failed to load student details.')),
+        appBar: AppBar(
+          title: const Text('Student Details',
+              style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black),
+        ),
+        body: const Center(
+            child: Text('Failed to load student details.',
+                style: TextStyle(color: Colors.black54))),
       );
     }
 
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, 
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Student Details'),
+        title: const Text('Student Details',
+            style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0), 
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         child: Form(
           key: formKey,
           child: Column(
@@ -70,29 +83,53 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
             children: [
               TextFormField(
                 initialValue: student!.firstName,
-                decoration: const InputDecoration(
+                style: const TextStyle(fontSize: 16),
+                decoration: InputDecoration(
                   labelText: 'First Name',
-                  border: OutlineInputBorder(),
+                  labelStyle: const TextStyle(color: Colors.black54),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                onChanged: (value) => student = student!.copyWith(firstName: value),
+                onChanged: (value) =>
+                    student = student!.copyWith(firstName: value),
               ),
-              const SizedBox(height: 16.0), 
+              const SizedBox(height: 16.0),
               TextFormField(
                 initialValue: student!.lastName,
-                decoration: const InputDecoration(
+                style: const TextStyle(fontSize: 16),
+                decoration: InputDecoration(
                   labelText: 'Last Name',
-                  border: OutlineInputBorder(),
+                  labelStyle: const TextStyle(color: Colors.black54),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                onChanged: (value) => student = student!.copyWith(lastName: value),
+                onChanged: (value) =>
+                    student = student!.copyWith(lastName: value),
               ),
               const SizedBox(height: 16.0),
               TextFormField(
                 initialValue: student!.course,
-                decoration: const InputDecoration(
+                style: const TextStyle(fontSize: 16),
+                decoration: InputDecoration(
                   labelText: 'Course',
-                  border: OutlineInputBorder(),
+                  labelStyle: const TextStyle(color: Colors.black54),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                onChanged: (value) => student = student!.copyWith(course: value),
+                onChanged: (value) =>
+                    student = student!.copyWith(course: value),
               ),
               const SizedBox(height: 16.0),
               DropdownButtonFormField<String>(
@@ -103,19 +140,29 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
                   'Third Year',
                   'Fourth Year',
                   'Fifth Year'
-                ].map((year) => DropdownMenuItem(
-                      value: year,
-                      child: Text(year),
-                    )).toList(),
-                decoration: const InputDecoration(
+                ]
+                    .map((year) => DropdownMenuItem(
+                          value: year,
+                          child: Text(year,
+                              style: const TextStyle(color: Colors.black87)),
+                        ))
+                    .toList(),
+                decoration: InputDecoration(
                   labelText: 'Year',
-                  border: OutlineInputBorder(),
+                  labelStyle: const TextStyle(color: Colors.black54),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
                 onChanged: (value) => setState(() => year = value),
               ),
               const SizedBox(height: 16.0),
               SwitchListTile(
-                title: const Text('Enrolled'),
+                title: const Text('Enrolled',
+                    style: TextStyle(color: Colors.black87)),
                 value: enrolled,
                 onChanged: (value) => setState(() => enrolled = value),
               ),
@@ -135,11 +182,13 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
                     textStyle: const TextStyle(fontSize: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text('Update'),
