@@ -32,8 +32,8 @@ class StudentFormScreenState extends State<StudentFormScreen> {
       );
 
       try {
-        await apiService.createStudent(newStudent); 
-        if (mounted) { 
+        await apiService.createStudent(newStudent);
+        if (mounted) {
           Navigator.pushReplacementNamed(context, '/studentList');
         }
       } catch (e) {
@@ -47,20 +47,20 @@ class StudentFormScreenState extends State<StudentFormScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Fill Student Information'),
+        title: const Text('Fill Student Information',
+            style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -69,20 +69,29 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.grey.shade300,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'First Name',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -94,9 +103,15 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Last Name',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -108,9 +123,15 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Course',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -122,23 +143,39 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Year',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                         value: year,
-                        items: ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Fifth Year']
+                        items: [
+                          'First Year',
+                          'Second Year',
+                          'Third Year',
+                          'Fourth Year',
+                          'Fifth Year'
+                        ]
                             .map((year) => DropdownMenuItem(
                                   value: year,
-                                  child: Text(year),
+                                  child: Text(year,
+                                      style: const TextStyle(
+                                          color: Colors.black87)),
                                 ))
                             .toList(),
                         onChanged: (value) => setState(() => year = value),
-                        validator: (value) => value == null ? 'Please select a year' : null,
+                        validator: (value) =>
+                            value == null ? 'Please select a year' : null,
                       ),
                       const SizedBox(height: 16),
                       SwitchListTile(
-                        title: const Text('Enrolled'),
+                        title: const Text('Enrolled',
+                            style: TextStyle(color: Colors.black87)),
                         value: enrolled,
                         onChanged: (value) => setState(() => enrolled = value),
                       ),
@@ -149,10 +186,12 @@ class StudentFormScreenState extends State<StudentFormScreen> {
                 ElevatedButton(
                   onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.blue, 
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text('Submit'),

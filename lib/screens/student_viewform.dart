@@ -29,7 +29,7 @@ class StudentViewFormState extends State<StudentViewForm> {
         student = updatedStudent;
       });
     } catch (e) {
-      // ignore: avoid_print
+      // Log error if needed
       print(e);
     }
   }
@@ -37,10 +37,9 @@ class StudentViewFormState extends State<StudentViewForm> {
   Future<void> _deleteStudent() async {
     try {
       await apiService.deleteStudent(student.id);
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context, true);
+      if (mounted) Navigator.pop(context, true);
     } catch (e) {
-      // ignore: avoid_print
+      // Log error if needed
       print(e);
     }
   }
@@ -48,18 +47,19 @@ class StudentViewFormState extends State<StudentViewForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context, true);
-            }),
-        title: const Text('View Student Details'),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          'View Student Details',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () async {
-              final confirm = await showDialog(
+              final confirm = await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
@@ -91,8 +91,7 @@ class StudentViewFormState extends State<StudentViewForm> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.all(
-                16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -100,13 +99,12 @@ class StudentViewFormState extends State<StudentViewForm> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      width: 3,
                       color: Colors.grey.shade300,
                     ),
                   ),
-                  padding: const EdgeInsets.all(
-                      20.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -136,9 +134,7 @@ class StudentViewFormState extends State<StudentViewForm> {
                         'Enrolled: ${student.enrolled ? 'Yes' : 'No'}',
                         style: TextStyle(
                           fontSize: 18,
-                          color: student.enrolled
-                              ? Colors.green
-                              : Colors.red,
+                          color: student.enrolled ? Colors.green : Colors.red,
                         ),
                       ),
                     ],
@@ -161,9 +157,12 @@ class StudentViewFormState extends State<StudentViewForm> {
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blueAccent,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: const Text('Update Details'),
                   ),
