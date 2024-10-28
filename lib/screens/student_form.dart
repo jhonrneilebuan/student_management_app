@@ -52,8 +52,15 @@ class StudentFormScreenState extends State<StudentFormScreen> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Fill Student Information',
-            style: TextStyle(color: Colors.black)),
+        title: const Text(
+          'Fill Student Information',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,

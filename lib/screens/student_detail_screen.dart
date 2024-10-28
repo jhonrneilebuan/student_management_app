@@ -51,8 +51,15 @@ class StudentDetailScreenState extends State<StudentDetailScreen> {
     if (student == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Student Details',
-              style: TextStyle(color: Colors.black)),
+          title: const Text(
+            'Student Details',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
         ),

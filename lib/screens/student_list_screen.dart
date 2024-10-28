@@ -33,7 +33,15 @@ class StudentListScreenState extends State<StudentListScreen> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Student List', style: TextStyle(color: Colors.black)),
+        title: const Text(
+          'Student List',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -42,7 +50,8 @@ class StudentListScreenState extends State<StudentListScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const StudentFormScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const StudentFormScreen()),
               );
             },
           ),
@@ -56,7 +65,8 @@ class StudentListScreenState extends State<StudentListScreen> {
             return RefreshIndicator(
               onRefresh: _refreshStudents,
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 itemCount: students.length,
                 itemBuilder: (context, index) {
                   return Card(
@@ -67,35 +77,44 @@ class StudentListScreenState extends State<StudentListScreen> {
                     ),
                     elevation: 2,
                     child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
                       title: Text(
                         '${students[index].firstName} ${students[index].lastName}',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text.rich(
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: '${students[index].course} - ${students[index].year}\n',
-                              style: const TextStyle(fontSize: 14, color: Colors.black54),
+                              text:
+                                  '${students[index].course} - ${students[index].year}\n',
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black54),
                             ),
                             TextSpan(
-                              text: 'Enrolled: ${students[index].enrolled ? 'Yes' : 'No'}',
+                              text:
+                                  'Enrolled: ${students[index].enrolled ? 'Yes' : 'No'}',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: students[index].enrolled ? Colors.green : Colors.red,
+                                color: students[index].enrolled
+                                    ? Colors.green
+                                    : Colors.red,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                      trailing: const Icon(Icons.arrow_forward_ios,
+                          color: Colors.grey, size: 16),
                       onTap: () async {
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => StudentViewForm(student: students[index]),
+                            builder: (context) =>
+                                StudentViewForm(student: students[index]),
                           ),
                         );
                         if (result == true) {

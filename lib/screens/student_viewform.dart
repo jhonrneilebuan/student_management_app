@@ -53,8 +53,13 @@ class StudentViewFormState extends State<StudentViewForm> {
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           'View Student Details',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
